@@ -95,9 +95,18 @@
        }
        peer_connection.onaddstream = function (event) {
            console.log("onAddStream", event);
-           event.stream.active = true;
-           document.getElementById('otherside').srcObject = event.stream;
-           document.getElementById('otherside').play();
+           event.stream.active = true
+
+           var video = document.getElementById('otherside');
+           // Older browsers may not have srcObject
+           if ('srcObject' in video) {
+               video.srcObject = event.stream;
+           } else {
+               // Avoid using this in new browsers, as it is going away.
+               video.src = URL.createObjectURL(event.stream);
+           }
+           video.play();
+
            /*
 
            var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");

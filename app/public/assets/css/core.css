@@ -1,0 +1,15 @@
+.grayscale_filter {
+    -webkit-filter: saturate(0.03);
+    filter: saturate(0.03);
+}
+
+html,
+body {
+    background-color: white;
+}
+
+video {
+    width: 320px;
+    height: 240px;
+    border: 1px solid black;
+}

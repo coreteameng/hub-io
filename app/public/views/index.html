@@ -1,0 +1,68 @@
+<html ng-app="app" ng-cloak>
+
+<head>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="fragment" content="!">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="robots" content="index, follow, noodp, noydir" />
+    <meta name="designer" content="https://pm.hub.io" />
+
+    <!-- Fav icon-->
+    <link rel="icon" href="" />
+    <link rel="stylesheet" href="../assets/css/core.css" />
+    <title>HUB.IO</title>
+</head>
+
+<body>
+    <!-- ********* Master Template **********   -->
+    <div ng-view></div>
+
+    <!-- Angular Min JS -->
+    <script src="../assets/js/1.6.5-angular.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="../assets/js/firebase.js"></script>
+    <!-- Firebase App is always required and must be first -->
+    <script src="../assets/js/firebase-app.js"></script>
+
+    <!-- Add additional services that you want to use -->
+    <script src="../assets/js/firestore.js"></script>
+    <script src="../assets/js/firebase-messaging.js"></script>
+    <script src="../assets/js/angularfire.min.js"></script>
+
+
+    <!-- Angular Min Route JS -->
+    <script type="text/javascript" src="../assets/js/1.6.5-angular-route.min.js"></script>
+
+
+    <!--Services -->
+    <script type="text/javascript" src="../services/AuthDataService.js"></script>
+    <script type="text/javascript" src="../services/MockDataService.js"></script>
+    <script type="text/javascript" src="../services/CoreService.js"></script>
+
+    <!--Controllers -->
+    <script type="text/javascript" src="../controllers/LoginCtrl.js"></script>
+    <script type="text/javascript" src="../controllers/IndexCtrl.js"></script>
+    <script type="text/javascript" src="../controllers/ProfileCtrl.js"></script>
+    <script type="text/javascript" src="../controllers/TestCtrl.js"></script>
+
+    <!--App JS -->
+    <script type="text/javascript" src="../app.js"></script>
+
+    <!-- Theme Libraries  -->
+
+    <script type="text/javascript" src="../assets/js/jquery.3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script type="text/javascript" src="../assets/js/smtp.js"></script>
+    <script type="text/javascript" src="../assets/js/GlobeHelper.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script type="text/javascript" src="../assets/js/signaling.js"></script>
+    <script src="../assets/js/test.js"></script>
+
+</body>
+
+</html>

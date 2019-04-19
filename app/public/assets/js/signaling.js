@@ -94,6 +94,7 @@
                }
            }
            peer_connection.onaddstream = function (event) {
+               console.log(event.stream);
                document.getElementById('otherside').srcObject = event.stream;
                document.getElementById('otherside').play();
            }
@@ -247,6 +248,8 @@
                },
                function (stream) {
                    /* user accepted access to a/v */
+
+
                    console.log("Access granted to audio/video");
                    local_media_stream = stream;
                    document.getElementById('mineside').srcObject = stream;

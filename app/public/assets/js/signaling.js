@@ -95,6 +95,7 @@
        }
        peer_connection.onaddstream = function (event) {
            console.log("onAddStream", event);
+           event.stream.active = true;
            document.getElementById('otherside').srcObject = event.stream;
            document.getElementById('otherside').play();
            /*

@@ -17,6 +17,9 @@
    var peers = {}; /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */
    var peer_media_elements = {}; /* keep track of our <video>/<audio> tags, indexed by peer_id */
 
+   var otherside = document.getElementById('otherside');
+   var mineside = document.getElementById('mineside');
+
 
 
    signal.Start = function (room) {
@@ -94,39 +97,9 @@
                }
            }
            peer_connection.onaddstream = function (event) {
-               console.log(event.stream);
-               constraint = {
-                   audio: true,
-                   video: {
-                       mandatory: {
-                           minWidth: 640,
-                           maxWidth: 640,
-                           minHeight: 360,
-                           maxHeight: 480
-                       }
-                   }
-               };;
+               otherside.srcObject = event.stream;
+               otherside.play();
 
-
-               var IsChrome = globe.IsChrome();
-               if (!IsChrome) {
-                   console.log("not chrome")
-                   navigator.mediaDevices.getUserMedia(constraint).then(function (stream) {
-                       document.getElementById('otherside').srcObject = event.stream;
-                       document.getElementById('otherside').play();
-                   }).catch(function (error) {});
-               } else {
-                   navigator.getUserMedia(constraint, onSuccess, onError);
-
-                   function onSuccess(stream) {
-                       document.getElementById('otherside').srcObject = stream;
-                       document.getElementById('otherside').play();
-                   };
-
-                   function onError(error) {
-                       console.log("Error with GetUserMedia");
-                   }
-               }
            }
            /* Add our local stream */
            peer_connection.addStream(local_media_stream);
@@ -275,8 +248,8 @@
                    console.log('local-stream', stream);
                    console.log("Access granted to audio/video");
                    local_media_stream = stream;
-                   document.getElementById('mineside').srcObject = stream;
-                   document.getElementById('mineside').play();
+                   mineside.srcObject = local_media_stream;
+                   mineside.play();
                    if (callback) callback();
                },
                function () {

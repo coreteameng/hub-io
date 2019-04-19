@@ -94,16 +94,8 @@
                }
            }
            peer_connection.onaddstream = function (event) {
-               console.log("onAddStream", event);
-               var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
-               remote_media.attr("autoplay", "autoplay");
-               if (MUTE_AUDIO_BY_DEFAULT) {
-                   remote_media.attr("muted", "true");
-               }
-               remote_media.attr("controls", "");
-               peer_media_elements[peer_id] = remote_media;
-               $('body').append(remote_media);
-               attachMediaStream(remote_media[0], event.stream);
+               document.getElementById('otherside').srcObject = event.stream;
+               document.getElementById('otherside').play();
            }
 
            /* Add our local stream */
@@ -236,6 +228,7 @@
                if (callback) callback();
                return;
            }
+
            /* Ask user for permission to use the computers microphone and/or camera, 
             * attach it to an <audio> or <video> tag if they give us access. */
            console.log("Requesting access to local audio / video inputs");
@@ -246,10 +239,7 @@
                navigator.mozGetUserMedia ||
                navigator.msGetUserMedia);
 
-           attachMediaStream = function (element, stream) {
-               console.log('DEPRECATED, attachMediaStream will soon be removed.');
-               element.srcObject = stream;
-           };
+
 
            navigator.getUserMedia({
                    "audio": USE_AUDIO,
@@ -259,13 +249,8 @@
                    /* user accepted access to a/v */
                    console.log("Access granted to audio/video");
                    local_media_stream = stream;
-                   var local_media = USE_VIDEO ? $("<video>") : $("<audio>");
-                   local_media.attr("autoplay", "autoplay");
-                   local_media.attr("muted", "true"); /* always mute ourselves by default */
-                   local_media.attr("controls", "");
-                   $('body').append(local_media);
-                   attachMediaStream(local_media[0], stream);
-
+                   document.getElementById('mineside').srcObject = stream;
+                   document.getElementById('mineside').play();
                    if (callback) callback();
                },
                function () {

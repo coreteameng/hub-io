@@ -95,6 +95,10 @@
        }
        peer_connection.onaddstream = function (event) {
            console.log("onAddStream", event);
+           document.getElementById('otherside').srcObject = event.stream;
+           document.getElementById('otherside').play();
+           /*
+
            var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
            remote_media.attr("autoplay", "autoplay");
            if (MUTE_AUDIO_BY_DEFAULT) {
@@ -104,6 +108,8 @@
            peer_media_elements[peer_id] = remote_media;
            $('body').append(remote_media);
            attachMediaStream(remote_media[0], event.stream);
+           */
+
        }
 
        /* Add our local stream */

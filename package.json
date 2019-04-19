@@ -1,0 +1,39 @@
+{
+  "name": "com.kuzu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
+    "express.io": "^1.1.13",
+    "express": "^4.16.4",
+    "firebase-admin": "^7.0.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "newsapi": "^2.4.0",
+    "node-cron": "^2.0.3",
+    "nodemon": "^1.18.10",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.12.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreteameng/hub-io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coreteameng/hub-io/issues"
+  },
+  "homepage": "https://github.com/coreteameng/hub-io#readme"
+}

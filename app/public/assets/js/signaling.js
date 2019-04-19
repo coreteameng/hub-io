@@ -94,7 +94,7 @@
                }
            }
            peer_connection.onaddstream = function (event) {
-               console.log(stream);
+               console.log(event.stream);
                constraint = {
                    audio: true,
                    video: {
@@ -112,7 +112,7 @@
                if (!IsChrome) {
                    console.log("not chrome")
                    navigator.mediaDevices.getUserMedia(constraint).then(function (stream) {
-                       document.getElementById('otherside').srcObject = stream;
+                       document.getElementById('otherside').srcObject = event.stream;
                        document.getElementById('otherside').play();
                    }).catch(function (error) {});
                } else {
@@ -266,7 +266,6 @@
                navigator.webkitGetUserMedia ||
                navigator.mozGetUserMedia ||
                navigator.msGetUserMedia);
-
            navigator.getUserMedia({
                    "audio": USE_AUDIO,
                    "video": USE_VIDEO

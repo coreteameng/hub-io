@@ -1,7 +1,7 @@
    var signal = {};
 
    /** CONFIG **/
-   var SIGNALING_SERVER = "https://hub-io.firebaseapp.com";
+   var SIGNALING_SERVER = "http://localhost";
    var USE_AUDIO = true;
    var USE_VIDEO = true;
    var DEFAULT_CHANNEL = 'some-global-channel-name';
@@ -17,14 +17,12 @@
    var peers = {}; /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */
    var peer_media_elements = {}; /* keep track of our <video>/<audio> tags, indexed by peer_id */
 
-   var otherside = document.getElementById('otherside');
-   var mineside = document.getElementById('mineside');
-
 
 
    signal.Start = function (room) {
        DEFAULT_CHANNEL = room;
-       console.log("Connecting to signaling server");;
+       console.log("Connecting to signaling server");
+       signaling_socket = io();
        signaling_socket = io();
 
        signaling_socket.on('connect', function () {
@@ -97,29 +95,20 @@
                }
            }
            peer_connection.onaddstream = function (event) {
-               otherside.srcObject = event.stream;
-               otherside.play();
-
+               console.log("onAddStream", event);
+               var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
+               remote_media.attr("autoplay", "autoplay");
+               if (MUTE_AUDIO_BY_DEFAULT) {
+                   remote_media.attr("muted", "true");
+               }
+               remote_media.attr("controls", "");
+               peer_media_elements[peer_id] = remote_media;
+               $('body').append(remote_media);
+               attachMediaStream(remote_media[0], event.stream);
            }
+
            /* Add our local stream */
-           navigator.getUserMedia = (navigator.getUserMedia ||
-               navigator.webkitGetUserMedia ||
-               navigator.mozGetUserMedia ||
-               navigator.msGetUserMedia);
-           navigator.getUserMedia({
-                   "audio": USE_AUDIO,
-                   "video": USE_VIDEO
-               },
-               function (stream) {
-                   /* user accepted access to a/v */
-                   console.log('add-stream', stream);
-                   peer_connection.addStream(stream);
-               },
-               function () {
-                   /* user denied access to a/v */
-                   console.log("Access denied for audio/video");
-                   alert("You chose not to provide access to the camera/microphone, demo will not work.");
-               });
+           peer_connection.addStream(local_media_stream);
 
            /* Only one side of the peer connection should create the
             * offer, the signaling server picks one to be the offerer. 
@@ -248,24 +237,36 @@
                if (callback) callback();
                return;
            }
-
            /* Ask user for permission to use the computers microphone and/or camera, 
             * attach it to an <audio> or <video> tag if they give us access. */
            console.log("Requesting access to local audio / video inputs");
+
+
            navigator.getUserMedia = (navigator.getUserMedia ||
                navigator.webkitGetUserMedia ||
                navigator.mozGetUserMedia ||
                navigator.msGetUserMedia);
+
+           attachMediaStream = function (element, stream) {
+               console.log('DEPRECATED, attachMediaStream will soon be removed.');
+               element.srcObject = stream;
+           };
+
            navigator.getUserMedia({
                    "audio": USE_AUDIO,
                    "video": USE_VIDEO
                },
                function (stream) {
                    /* user accepted access to a/v */
-                   console.log('local-stream', stream);
                    console.log("Access granted to audio/video");
-                   mineside.srcObject = stream
-                   mineside.play();
+                   local_media_stream = stream;
+                   var local_media = USE_VIDEO ? $("<video>") : $("<audio>");
+                   local_media.attr("autoplay", "autoplay");
+                   local_media.attr("muted", "true"); /* always mute ourselves by default */
+                   local_media.attr("controls", "");
+                   $('body').append(local_media);
+                   attachMediaStream(local_media[0], stream);
+
                    if (callback) callback();
                },
                function () {

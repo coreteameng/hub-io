@@ -94,11 +94,40 @@
                }
            }
            peer_connection.onaddstream = function (event) {
-               console.log(event.stream);
-               document.getElementById('otherside').srcObject = event.stream;
-               document.getElementById('otherside').play();
-           }
+               console.log(stream);
+               constraint = {
+                   audio: true,
+                   video: {
+                       mandatory: {
+                           minWidth: 640,
+                           maxWidth: 640,
+                           minHeight: 360,
+                           maxHeight: 480
+                       }
+                   }
+               };;
 
+
+               var IsChrome = globe.IsChrome();
+               if (!IsChrome) {
+                   console.log("not chrome")
+                   navigator.mediaDevices.getUserMedia(constraint).then(function (stream) {
+                       document.getElementById('otherside').srcObject = stream;
+                       document.getElementById('otherside').play();
+                   }).catch(function (error) {});
+               } else {
+                   navigator.getUserMedia(constraint, onSuccess, onError);
+
+                   function onSuccess(stream) {
+                       document.getElementById('otherside').srcObject = stream;
+                       document.getElementById('otherside').play();
+                   };
+
+                   function onError(error) {
+                       console.log("Error with GetUserMedia");
+                   }
+               }
+           }
            /* Add our local stream */
            peer_connection.addStream(local_media_stream);
 
@@ -233,14 +262,10 @@
            /* Ask user for permission to use the computers microphone and/or camera, 
             * attach it to an <audio> or <video> tag if they give us access. */
            console.log("Requesting access to local audio / video inputs");
-
-
            navigator.getUserMedia = (navigator.getUserMedia ||
                navigator.webkitGetUserMedia ||
                navigator.mozGetUserMedia ||
                navigator.msGetUserMedia);
-
-
 
            navigator.getUserMedia({
                    "audio": USE_AUDIO,
@@ -248,8 +273,7 @@
                },
                function (stream) {
                    /* user accepted access to a/v */
-
-
+                   console.log('local-stream', stream);
                    console.log("Access granted to audio/video");
                    local_media_stream = stream;
                    document.getElementById('mineside').srcObject = stream;

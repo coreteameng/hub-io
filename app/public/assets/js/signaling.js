@@ -102,7 +102,24 @@
 
            }
            /* Add our local stream */
-           peer_connection.addStream(local_media_stream);
+           navigator.getUserMedia = (navigator.getUserMedia ||
+               navigator.webkitGetUserMedia ||
+               navigator.mozGetUserMedia ||
+               navigator.msGetUserMedia);
+           navigator.getUserMedia({
+                   "audio": USE_AUDIO,
+                   "video": USE_VIDEO
+               },
+               function (stream) {
+                   /* user accepted access to a/v */
+                   console.log('add-stream', stream);
+                   peer_connection.addStream(stream);
+               },
+               function () {
+                   /* user denied access to a/v */
+                   console.log("Access denied for audio/video");
+                   alert("You chose not to provide access to the camera/microphone, demo will not work.");
+               });
 
            /* Only one side of the peer connection should create the
             * offer, the signaling server picks one to be the offerer. 
@@ -247,8 +264,7 @@
                    /* user accepted access to a/v */
                    console.log('local-stream', stream);
                    console.log("Access granted to audio/video");
-                   local_media_stream = stream;
-                   mineside.srcObject = local_media_stream;
+                   mineside.srcObject = stream
                    mineside.play();
                    if (callback) callback();
                },

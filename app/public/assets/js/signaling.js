@@ -19,7 +19,8 @@ var peer_media_elements = {}; /* keep track of our <video>/<audio> tags, indexed
 
 
 
-DEFAULT_CHANNEL = 'room-1';
+
+DEFAULT_CHANNEL = 'room-2';
 console.log("Connecting to signaling server");
 signaling_socket = io();
 signaling_socket = io();

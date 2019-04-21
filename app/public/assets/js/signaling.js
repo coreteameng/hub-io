@@ -103,8 +103,6 @@
        peer_connection.ontrack = function (event) {
            console.log("onAddStream", event);
 
-
-
            console.log(event.streams[0]);
            var remote_video = document.getElementById('otherside');
            // Older browsers may not have srcObject
@@ -253,37 +251,31 @@
        /* Ask user for permission to use the computers microphone and/or camera, 
         * attach it to an <audio> or <video> tag if they give us access. */
        console.log("Requesting access to local audio / video inputs");
-       navigator.getUserMedia = (navigator.getUserMedia ||
-           navigator.webkitGetUserMedia ||
-           navigator.mozGetUserMedia ||
-           navigator.msGetUserMedia);
-
-       navigator.getUserMedia({
-               "audio": USE_AUDIO,
-               "video": USE_VIDEO
-           },
-           function (stream) {
-               /* user accepted access to a/v */
-               console.log("Access granted to audio/video");
-               local_media_stream = stream;
 
 
-               var video = document.getElementById('mineside');
-               // Older browsers may not have srcObject
-               if ('srcObject' in video) {
-                   video.srcObject = stream;
-                   video.play();
-               } else {
-                   // Avoid using this in new browsers, as it is going away.
-                   video.src = URL.createObjectURL(stream);
-                   video.play();
-               }
-               if (callback) callback();
-           },
-           function () {
-               /* user denied access to a/v */
-               console.log("Access denied for audio/video");
-               alert("You chose not to provide access to the camera/microphone, demo will not work.");
-               if (errorback) errorback();
-           });
+       navigator.mediaDevices.getUserMedia({
+           "audio": USE_AUDIO,
+           "video": USE_VIDEO
+       }).then(function (stream) {
+           /* user accepted access to a/v */
+           console.log("Access granted to audio/video");
+           local_media_stream = stream;
+           var video = document.getElementById('mineside');
+           // Older browsers may not have srcObject
+           if ('srcObject' in video) {
+               video.srcObject = stream;
+               video.play();
+           } else {
+               // Avoid using this in new browsers, as it is going away.
+               video.src = URL.createObjectURL(stream);
+               video.play();
+           }
+           if (callback) callback();
+
+       }).catch(function (error) {
+           /* user denied access to a/v */
+           console.log("Access denied for audio/video");
+           alert("You chose not to provide access to the camera/microphone, demo will not work.");
+           if (errorback) errorback();
+       })
    }

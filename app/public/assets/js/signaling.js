@@ -69,7 +69,14 @@
            console.log("Already connected to peer ", peer_id);
            return;
        }
+
+       var configuration = {
+           offerToReceiveAudio: true,
+           offerToReceiveVideo: true
+       }
+
        var peer_connection = new RTCPeerConnection({
+               "configuration": configuration,
                "iceServers": ICE_SERVERS
            }, {
                "optional": [{
@@ -96,8 +103,9 @@
        peer_connection.ontrack = function (event) {
            console.log("onAddStream", event);
 
-           console.log(event.streams[0]);
 
+
+           console.log(event.streams[0]);
            var remote_video = document.getElementById('otherside');
            // Older browsers may not have srcObject
            if ('srcObject' in remote_video) {
@@ -108,18 +116,9 @@
                remote_video.src = URL.createObjectURL(event.streams[0]);
                remote_video.play();
            }
-
-           waitUntilRemoteStreamStartsFlowing();
        }
 
-       function waitUntilRemoteStreamStartsFlowing(remote_video) {
 
-           if (!(remote_video.readyState <= HTMLMediaElement.HAVE_CURRENT_DATA ||
-                   remote_video.paused || remote_video.currentTime <= 0)) {
-               // remote stream started flowing!
-           } else setTimeout(waitUntilRemoteStreamStartsFlowing(remote_video), 50);
-
-       }
 
        /* Add our local stream */
        peer_connection.addStream(local_media_stream);

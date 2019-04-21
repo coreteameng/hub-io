@@ -101,11 +101,13 @@
            // Older browsers may not have srcObject
            if ('srcObject' in video) {
                video.srcObject = event.stream;
+               video.play();
            } else {
                // Avoid using this in new browsers, as it is going away.
                video.src = URL.createObjectURL(event.stream);
+               video.play();
            }
-           video.play();
+
 
            /*
 

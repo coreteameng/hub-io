@@ -98,30 +98,26 @@
 
            console.log(event.streams[0]);
 
-           var video = document.getElementById('otherside');
+           var remote_video = document.getElementById('otherside');
            // Older browsers may not have srcObject
-           if ('srcObject' in video) {
-               video.srcObject = event.streams[0];
-               video.play();
+           if ('srcObject' in remote_video) {
+               remote_video.srcObject = event.streams[0];
+               remote_video.play();
            } else {
                // Avoid using this in new browsers, as it is going away.
-               video.src = URL.createObjectURL(event.streams[0]);
-               video.play();
+               remote_video.src = URL.createObjectURL(event.streams[0]);
+               remote_video.play();
            }
 
+           waitUntilRemoteStreamStartsFlowing();
+       }
 
-           /*
+       function waitUntilRemoteStreamStartsFlowing(remote_video) {
 
-           var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
-           remote_media.attr("autoplay", "autoplay");
-           if (MUTE_AUDIO_BY_DEFAULT) {
-               remote_media.attr("muted", "true");
-           }
-           remote_media.attr("controls", "");
-           peer_media_elements[peer_id] = remote_media;
-           $('body').append(remote_media);
-           attachMediaStream(remote_media[0], event.stream);
-           */
+           if (!(remote_video.readyState <= HTMLMediaElement.HAVE_CURRENT_DATA ||
+                   remote_video.paused || remote_video.currentTime <= 0)) {
+               // remote stream started flowing!
+           } else setTimeout(waitUntilRemoteStreamStartsFlowing(remote_video), 50);
 
        }
 

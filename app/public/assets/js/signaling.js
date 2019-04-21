@@ -70,13 +70,8 @@
            return;
        }
 
-       var configuration = {
-           offerToReceiveAudio: true,
-           offerToReceiveVideo: true
-       }
 
        var peer_connection = new RTCPeerConnection({
-               "configuration": configuration,
                "iceServers": ICE_SERVERS
            }, {
                "optional": [{
@@ -100,17 +95,17 @@
                });
            }
        }
-       peer_connection.onaddstream = function (event) {
+       peer_connection.ontrack = function (event) {
            console.log("onAddStream", event);
-           console.log(event.stream);
+           console.log(event.streams[0]);
            var remote_video = document.getElementById('otherside');
            // Older browsers may not have srcObject
            if ('srcObject' in remote_video) {
-               remote_video.srcObject = event.stream
+               remote_video.srcObject = event.streams[0]
                remote_video.play();
            } else {
                // Avoid using this in new browsers, as it is going away.
-               remote_video.src = URL.createObjectURL(event.stream);
+               remote_video.src = URL.createObjectURL(event.streams[0]);
                remote_video.play();
            }
            remote_video.play();
@@ -272,12 +267,16 @@
            video.srcObject = stream;
            local_media_stream = stream;
            video.play();
+
+           if (callback) callback();
+
        }
 
        function handleError(error) {
            if (error.name === 'ConstraintNotSatisfiedError') {
                let v = constraints.video;
                errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
+               if (error) errorback();
            } else if (error.name === 'PermissionDeniedError') {
                errorMsg('Permissions have not been granted to use your camera and ' +
                    'microphone, you need to allow the page access to your devices in ' +

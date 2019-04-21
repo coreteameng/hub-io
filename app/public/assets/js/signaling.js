@@ -98,20 +98,14 @@
        peer_connection.ontrack = function (event) {
            console.log("onAddStream", event);
            console.log(event.streams[0]);
-           var remote_video = document.getElementById('otherside');
-           // Older browsers may not have srcObject
-           if ('srcObject' in remote_video) {
-               remote_video.srcObject = event.streams[0]
-               remote_video.play();
-           } else {
-               // Avoid using this in new browsers, as it is going away.
-               remote_video.src = URL.createObjectURL(event.streams[0]);
-               remote_video.play();
-           }
-           remote_video.play();
+           var MediaStream = window.webkitMediaStream || window.MediaStream;
+           event.streams[0] = new MediaStream(event.streams[0].getAudioTracks(), event.streams[0].getVideoTracks());
+           document.getElementById('otherside').srcObject = event.streams[0];
+           document.getElementById('otherside').play();
        }
 
        /* Add our local stream */
+       console.log('local_media_stream after ontrack', local_media_stream);
        peer_connection.addStream(local_media_stream);
 
        /* Only one side of the peer connection should create the
@@ -242,13 +236,10 @@
            console.log("local_media_stream not null");
            return;
        }
-
        const constraints = window.constraints = {
            audio: USE_AUDIO,
            video: USE_VIDEO
        }
-
-
        try {
            const stream = await navigator.mediaDevices.getUserMedia(constraints);
            handleSuccess(stream);

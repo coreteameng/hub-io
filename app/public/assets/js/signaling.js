@@ -93,18 +93,19 @@
                });
            }
        }
-       peer_connection.onaddstream = function (event) {
+       peer_connection.ontrack = function (event) {
            console.log("onAddStream", event);
-           event.stream.active = true
+
+           console.log(event.streams[0]);
 
            var video = document.getElementById('otherside');
            // Older browsers may not have srcObject
            if ('srcObject' in video) {
-               video.srcObject = event.stream;
+               video.srcObject = event.streams[0];
                video.play();
            } else {
                // Avoid using this in new browsers, as it is going away.
-               video.src = URL.createObjectURL(event.stream);
+               video.src = URL.createObjectURL(event.streams[0]);
                video.play();
            }
 

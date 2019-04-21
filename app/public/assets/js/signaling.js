@@ -10,21 +10,20 @@ var MUTE_AUDIO_BY_DEFAULT = false;
 /** You should probably use a different stun server doing commercial stuff **/
 /** Also see: https://gist.github.com/zziuni/3741933 **/
 var ICE_SERVERS = [{
-    urls: "stun:stun.1.google.com:19302"
+    urls: "stun:stun.l.google.com:19302"
+}, {
+    urls: 'turn:numb.viagenie.ca:3478',
+    credential: 'Hk5967245.', //your  password
+    username: 'coreteameng@email.com'
 }];
 var signaling_socket = null; /* our socket.io connection to our webserver */
 var local_media_stream = null; /* our own microphone / webcam */
 var peers = {}; /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */
 var peer_media_elements = {}; /* keep track of our <video>/<audio> tags, indexed by peer_id */
 
-
-
-
 DEFAULT_CHANNEL = 'room-2';
 console.log("Connecting to signaling server");
 signaling_socket = io();
-signaling_socket = io();
-
 signaling_socket.on('connect', function () {
 
     if (!("mediaDevices" in navigator) || !("RTCPeerConnection" in window)) {

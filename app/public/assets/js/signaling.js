@@ -102,7 +102,6 @@
        }
        peer_connection.ontrack = function (event) {
            console.log("onAddStream", event);
-
            console.log(event.streams[0]);
            var remote_video = document.getElementById('otherside');
            // Older browsers may not have srcObject
@@ -115,8 +114,6 @@
                remote_video.play();
            }
        }
-
-
 
        /* Add our local stream */
        peer_connection.addStream(local_media_stream);
@@ -242,40 +239,56 @@
    /***********************/
    /** Local media stuff **/
    /***********************/
-   function setup_local_media(callback, errorback) {
+   async function setup_local_media(callback, errorback) {
        if (local_media_stream != null) {
            /* ie, if we've already been initialized */
            if (callback) callback();
+           console.log("local_media_stream not null");
            return;
        }
-       /* Ask user for permission to use the computers microphone and/or camera, 
-        * attach it to an <audio> or <video> tag if they give us access. */
-       console.log("Requesting access to local audio / video inputs");
+
+       const constraints = window.constraints = {
+           audio: USE_AUDIO,
+           video: USE_VIDEO
+       }
 
 
-       navigator.mediaDevices.getUserMedia({
-           "audio": USE_AUDIO,
-           "video": USE_VIDEO
-       }).then(function (stream) {
-           /* user accepted access to a/v */
-           console.log("Access granted to audio/video");
+       try {
+           const stream = await navigator.mediaDevices.getUserMedia(constraints);
+           handleSuccess(stream);
+       } catch (e) {
+           handleError(e);
+       }
+
+
+
+       function handleSuccess(stream) {
+           const video = document.getElementById('mineside');
+           const videoTracks = stream.getVideoTracks();
+           console.log('Got stream with constraints:', constraints);
+           console.log(`Using video device: ${videoTracks[0].label}`);
+           window.stream = stream; // make variable available to browser console
+           video.srcObject = stream;
            local_media_stream = stream;
-           var video = document.getElementById('mineside');
-           // Older browsers may not have srcObject
-           if ('srcObject' in video) {
-               video.srcObject = stream;
-               video.play();
-           } else {
-               // Avoid using this in new browsers, as it is going away.
-               video.src = URL.createObjectURL(stream);
-               video.play();
-           }
-           if (callback) callback();
+           video.play();
+       }
 
-       }).catch(function (error) {
-           /* user denied access to a/v */
-           console.log("Access denied for audio/video");
-           alert("You chose not to provide access to the camera/microphone, demo will not work.");
-           if (errorback) errorback();
-       })
+       function handleError(error) {
+           if (error.name === 'ConstraintNotSatisfiedError') {
+               let v = constraints.video;
+               errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
+           } else if (error.name === 'PermissionDeniedError') {
+               errorMsg('Permissions have not been granted to use your camera and ' +
+                   'microphone, you need to allow the page access to your devices in ' +
+                   'order for the demo to work.');
+           }
+           errorMsg(`getUserMedia error: ${error.name}`, error);
+       }
+
+       function errorMsg(msg, error) {
+           console.log(msg);
+           if (typeof error !== 'undefined') {
+               console.error(error);
+           }
+       }
    }

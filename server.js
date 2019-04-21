@@ -110,6 +110,7 @@ io.sockets.on('connection', function (socket) {
             socket.emit('removePeer', {
                 'peer_id': id
             });
+            s
         }
     }
     socket.on('part', part);

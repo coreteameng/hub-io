@@ -1,8 +1,48 @@
-<label style="text-align: center">Test Video Conference </label><br />
+<!-- Main Content -->
+<section class="content">
+    <div class="body_scroll">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2>P2P Lesson</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/"><i class="zmdi zmdi-home"></i> Aero</a></li>
+                        <li class="breadcrumb-item active">Modules</li>
+                        <li class="breadcrumb-item active">Video Lesson</li>
+                    </ul>
+                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
+                            class="zmdi zmdi-sort-amount-desc"></i></button>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i
+                            class="zmdi zmdi-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="header">
+                            Student
+                        </div>
+                        <div class="body" style="text-align: center">
+                            <video id="mineside"></video>
+                        </div>
+                    </div>
+                </div>
 
-<button ng-click="test.Call()">Call </button> <br />
-
-
-<video id="mineside"></video> <br />
-
-<video id="otherside"></video>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="header">
+                            Teacher
+                        </div>
+                        <div class="body" style="text-align: center">
+                            <video id="otherside"></video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

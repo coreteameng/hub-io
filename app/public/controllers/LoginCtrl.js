@@ -6,14 +6,5 @@ LoginCtrl.controller('LoginController', function ($timeout, $scope, $rootScope, 
         Email: "",
         Password: "",
     }
-
-
-
-
-
-
-
     vm.doLogin = function () {}
-
-
 });

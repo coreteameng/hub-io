@@ -272,14 +272,15 @@
                local_media_stream = stream;
 
 
+               var video = document.getElementById('mineside');
                // Older browsers may not have srcObject
                if ('srcObject' in video) {
-                   document.getElementById('mineside').srcObject = stream;
-                   document.getElementById('mineside').play();
+                   video.srcObject = stream;
+                   video.play();
                } else {
                    // Avoid using this in new browsers, as it is going away.
-                   document.getElementById('mineside').src = URL.createObjectURL(stream);
-                   document.getElementById('mineside').play();
+                   video.src = URL.createObjectURL(stream);
+                   video.play();
                }
                if (callback) callback();
            },

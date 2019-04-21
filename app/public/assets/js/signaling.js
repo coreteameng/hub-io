@@ -100,19 +100,20 @@
                });
            }
        }
-       peer_connection.ontrack = function (event) {
+       peer_connection.onaddstream = function (event) {
            console.log("onAddStream", event);
-           console.log(event.streams[0]);
+           console.log(event.stream);
            var remote_video = document.getElementById('otherside');
            // Older browsers may not have srcObject
            if ('srcObject' in remote_video) {
-               remote_video.srcObject = event.streams[0];
+               remote_video.srcObject = event.stream
                remote_video.play();
            } else {
                // Avoid using this in new browsers, as it is going away.
-               remote_video.src = URL.createObjectURL(event.streams[0]);
+               remote_video.src = URL.createObjectURL(event.stream);
                remote_video.play();
            }
+           remote_video.play();
        }
 
        /* Add our local stream */
